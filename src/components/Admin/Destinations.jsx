@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { firestore } from '../../firebase';
 import { useState, useEffect, useRef } from 'react';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
@@ -68,7 +68,7 @@ export default function Destinations() {
         }
 
         const result = await setDoc(destinationRef, attractions).then(() => {
-            uploadProfile();
+            uploadProfile(destinationRef);
         });
 
 
@@ -94,6 +94,7 @@ export default function Destinations() {
         if (!destinations) return;
 
         function editLocation(data) {
+            setImage(null);
             setEditing(true)
             setSelectedDestination(data)
             const destination = data.data();
@@ -138,7 +139,7 @@ export default function Destinations() {
             latitude: latitude.current.value,
             longitude: longitude.current.value
         }).then(() => {
-            uploadProfile();
+            uploadProfile(destinationRef);
         })
 
         // name.current.value = ""
@@ -173,12 +174,16 @@ export default function Destinations() {
         })
     }
 
-    function uploadProfile() {
+    function uploadProfile(destinationRef) {
         // setLoading(true);
         if (image == null) return;
         const profileRef = ref(storage, category.current.value + " - " + name.current.value)
         uploadString(profileRef, image, 'data_url').then(() => {
-            window.location.reload();
+            getDownloadURL(profileRef).then((url)=>{
+                updateDoc(destinationRef, {image_url: url})
+            }).then(()=>{
+                window.location.reload();
+            })
         });
     }
 
