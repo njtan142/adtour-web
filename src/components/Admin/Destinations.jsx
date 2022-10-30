@@ -14,10 +14,10 @@ export default function Destinations() {
     const [selectedCategory, setSelectedCategory] = useState("cultural");
     const [editing, setEditing] = useState(false);
     const [selectedDestination, setSelectedDestination] = useState();
-    
+
     const selectionRef = useRef();
-    
-    
+
+
     const category = useRef();
     const name = useRef();
     const location = useRef();
@@ -126,6 +126,7 @@ export default function Destinations() {
 
     function updateLocation(e) {
         e.preventDefault();
+        console.log("hello")
 
         const destinationRef = doc(collection(doc(collection(firestore, 'LocationsData'), category.current.value), 'destinations'), selectedDestination.id)
 
@@ -174,17 +175,55 @@ export default function Destinations() {
         })
     }
 
+    async function getDataURL(url) {
+        let blob = await fetch(url).then(r => r.blob());
+        let dataUrl = await new Promise(resolve => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+        });
+        return dataUrl;
+    }
+
+    function toDataURL(src, callback) {
+        var image = new Image();
+        image.crossOrigin = 'Anonymous';
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = this.naturalHeight;
+            canvas.width = this.naturalWidth;
+            context.drawImage(this, 0, 0);
+            var dataURL = canvas.toDataURL('image/jpeg');
+            callback(dataURL);
+        };
+        image.src = src;
+    }
+
     function uploadProfile(destinationRef) {
         // setLoading(true);
-        if (image == null) return;
+        if (image == null) {
+            window.location.reload();
+            return;
+        };
+        console.log('uploading');
         const profileRef = ref(storage, category.current.value + " - " + name.current.value)
-        uploadString(profileRef, image, 'data_url').then(() => {
-            getDownloadURL(profileRef).then((url)=>{
-                updateDoc(destinationRef, {image_url: url})
-            }).then(()=>{
-                window.location.reload();
-            })
-        });
+        if (image.includes("https")) {
+            console.log("it is an url image")
+            console.log(image);
+            updateDoc(destinationRef, { image_url: image })
+        } else {
+            uploadString(profileRef, image, 'data_url', { contentType: 'image/' }).then(() => {
+                getDownloadURL(profileRef).then((url) => {
+                    updateDoc(destinationRef, { image_url: url })
+                }).then(() => {
+                    window.location.reload();
+                }).catch((e) => {
+                    window.location.reload();
+                })
+            });
+        }
+
     }
 
     return (
