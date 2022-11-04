@@ -126,7 +126,6 @@ export default function Destinations() {
 
     function updateLocation(e) {
         e.preventDefault();
-        console.log("hello")
 
         const destinationRef = doc(collection(doc(collection(firestore, 'LocationsData'), category.current.value), 'destinations'), selectedDestination.id)
 
@@ -206,11 +205,8 @@ export default function Destinations() {
             window.location.reload();
             return;
         };
-        console.log('uploading');
         const profileRef = ref(storage, category.current.value + " - " + name.current.value)
         if (image.includes("https")) {
-            console.log("it is an url image")
-            console.log(image);
             updateDoc(destinationRef, { image_url: image })
         } else {
             uploadString(profileRef, image, 'data_url', { contentType: 'image/' }).then(() => {

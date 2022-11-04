@@ -65,9 +65,7 @@ export default function Locations() {
 
   function addSelection() {
     let selections = selectionRender != null ? selectionRender : [];
-    console.log(typeRef)
     let type = typeRef.current.value
-    console.log(heirarchy, type, heirarchy[type])
     let options = currentHeirarchy[type].locations
     if (options.length <= 0) return;
     selections.push(

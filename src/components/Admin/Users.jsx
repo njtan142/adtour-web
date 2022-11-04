@@ -14,7 +14,6 @@ const Users = (props) => {
 
     function userSelected(user){
         setSelectedUser(user)
-        console.log(user)
     }
 
     useEffect(()=>{

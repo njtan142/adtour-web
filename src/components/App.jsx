@@ -6,6 +6,7 @@ import Users from "./Admin/Users";
 import Home from "./Home";
 import Destinations from "./Admin/Destinations";
 import Locations from "./Admin/Locations";
+import Login from "./Login";
 
 
 
@@ -16,6 +17,7 @@ const App = (props) => {
                 <AuthProvider>
                     <Routes>
                         <Route exact path="/" element={<Home />} />
+                        <Route exact path="/login" element={<Login />} />
                         <Route exact path="/destination" element={<Destination />} />
                         <Route exact path="/users" element={<Users />} />
                         <Route exact path="/destinations" element={<Destinations />} />

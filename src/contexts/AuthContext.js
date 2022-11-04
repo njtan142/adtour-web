@@ -22,7 +22,9 @@ export function AuthProvider({ children }) {
     }
 
     function logIn(email, password){
-        return signInWithEmailAndPassword(auth, email, password)
+        return signInWithEmailAndPassword(auth, email, password).catch((e)=>{
+            return [false, e.toString()];
+        })
     }
 
     async function logOut(){

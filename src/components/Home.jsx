@@ -9,15 +9,18 @@ import Reports from './admin-components/Reports';
 import Messages from './admin-components/Messages';
 import Settings from './admin-components/Settings';
 import Help from './admin-components/Help';
+import { UseAuth } from '../contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 export default function Home() {
   const overViewRef = useRef();
   const reportsRef = useRef();
-  const messagesRef = useRef();
   const settingsRef = useRef();
-  const helpRef = useRef();
   const [currentNavigation, setCurrentNavigation] = useState(overViewRef);
   const [contentRender, setContentRender] = useState(null);
+  const { currentUser, getData, logOut } = UseAuth();
+  
+
 
   function selectNavigation(navRef) {
     if (currentNavigation == null) return;
@@ -31,6 +34,10 @@ export default function Home() {
     currentNavigation.current.classList.add('NavigationSelected');
   }, [currentNavigation]);
 
+  useEffect(()=>{
+    setContentRender(<Overview></Overview>);
+  },[])
+
   function updateNavigation(navRef) {
     let targetContent = navRef.current.innerHTML;
     switch (targetContent) {
@@ -40,14 +47,8 @@ export default function Home() {
       case 'Reports':
         setContentRender(<Reports></Reports>);
         break;
-      case 'Messages':
-        setContentRender(<Messages></Messages>);
-        break;
       case 'Settings':
         setContentRender(<Settings></Settings>);
-        break;
-      case 'Help':
-        setContentRender(<Help></Help>);
         break;
       default:
         break;
@@ -56,13 +57,15 @@ export default function Home() {
 
   return (
     <Container>
+      {!currentUser &&
+        <Navigate to="/login"></Navigate>
+      }
       <NavigationContainer>
         <Logo src={AdtourLogo}></Logo>
         <Navigation ref={overViewRef} onClick={() => selectNavigation(overViewRef)}>Overview</Navigation>
         <Navigation ref={reportsRef} onClick={() => selectNavigation(reportsRef)}>Reports</Navigation>
-        <Navigation ref={messagesRef} onClick={() => selectNavigation(messagesRef)}>Messages</Navigation>
         <Navigation ref={settingsRef} onClick={() => selectNavigation(settingsRef)}>Settings</Navigation>
-        <Navigation ref={helpRef} onClick={() => selectNavigation(helpRef)}>Help</Navigation>
+        <Navigation onClick={() => logOut()}>Logout</Navigation>
       </NavigationContainer>
       <ContentContainer>
         {contentRender}
