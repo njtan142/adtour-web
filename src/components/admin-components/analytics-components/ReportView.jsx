@@ -6,9 +6,8 @@ export default function ReportView(props) {
 
         <Container>
             {
-                console.log(props)
+                props
             }
-            Reports
         </Container>
     )
 }

@@ -14,7 +14,6 @@ export default function Settings() {
           <CardFunctions>
             <CardFunction onClick={()=>{window.location = "/users"}}>Manage users</CardFunction>
             <CardFunction onClick={()=>{window.location = "/destinations"}}>Manage destinations</CardFunction>
-            <CardFunction onClick={()=>{window.location = "/locations"}}>Manage locations</CardFunction>
           </CardFunctions>
         </Card>
       </ContentContainer>

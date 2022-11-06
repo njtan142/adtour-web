@@ -11,6 +11,11 @@ import UserCount from './analytics-components/UserCount';
 import PositiveCount from './analytics-components/PositiveCount';
 import NegativeCount from './analytics-components/NegativeCount';
 import FeedbackCount from './analytics-components/FeedbackCount';
+import MapDestribution from './analytics-components/MapDestribution';
+import Performance from './analytics-components/Performance';
+import Gender from './analytics-components/Gender';
+import DailyAppVisits from './analytics-components/DailyAppVisits';
+import TouristType from './analytics-components/TouristType';
 
 export default function Reports() {
   const monthsRef = useRef();
@@ -20,7 +25,23 @@ export default function Reports() {
   const [menuToRender, setmenuToRender] = useState();
   const { currentUser, logOut } = UseAuth();
   const [adminName, setAdminName] = useState();
-  
+  const [generate, setGenerate] = useState(false);
+
+  const reports = {
+    users: false,
+    positive: false,
+    negative: false,
+    feedback: false,
+    performance: false,
+    destribution: false,
+    gender: false,
+    visits: false,
+    tourist: false,
+  }
+
+  const [toGenerate, setToGenerate] = useState(reports);
+
+
 
   useEffect(() => {
     function menuToRenderLogic() {
@@ -61,11 +82,31 @@ export default function Reports() {
     })
   }, [])
 
+  useEffect(() => {
+    console.log(reports)
+  }, [reports])
+
 
 
 
   return (
     <Container>
+      {
+        generate && 
+        <ReportView> 
+          {console.log(toGenerate.users)}
+          {toGenerate.users && <UserCount />}
+          {toGenerate.positive && <PositiveCount />}
+          {toGenerate.negative && <NegativeCount />}
+          {toGenerate.feedback && <FeedbackCount />}
+          {toGenerate.performance && <Performance />}
+          {toGenerate.destribution && <MapDestribution />}
+          {toGenerate.gender && <Gender />}
+          {toGenerate.visits && <DailyAppVisits />}
+          {toGenerate.tourist && <TouristType />}
+
+        </ReportView>
+      }
       <Header>
         <Title><h1>Overview</h1> <p>Improve your company's social profile</p></Title>
         <Profile>
@@ -90,49 +131,62 @@ export default function Reports() {
         <CheckBoxes>
           <Info>Costumize your report</Info>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.users = value.target.checked; console.log(reports) }} />
             <Label>Total No. of Users</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.positive = value.target.checked; console.log(reports) }} />
             <Label>Positive Ratings</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.negative = value.target.checked; console.log(reports) }} />
             <Label>Negative Ratings</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.feedback = value.target.checked; console.log(reports) }} />
             <Label>Total No. of Feedback</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.performance = value.target.checked; console.log(reports) }} />
             <Label>Iloilo Tourism Performance</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.destribution = value.target.checked; console.log(reports) }} />
             <Label>Map Destribution of International Tourist</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.gender = value.target.checked; console.log(reports) }} />
             <Label>Statistics by Gender</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.visits = value.target.checked; console.log(reports) }} />
             <Label>Daily App Visits</Label>
           </div>
           <div>
-            <CheckBox type="checkbox" />
+            <CheckBox type="checkbox" onChange={(value) => { reports.tourist = value.target.checked; console.log(reports) }} />
             <Label>Type of Tourist</Label>
           </div>
         </CheckBoxes>
         <GenerateReport>
-          <button>Generate PDF</button>
+          <button onClick={() => {setGenerate(true); setToGenerate(reports)}}>Generate PDF</button>
         </GenerateReport>
       </ReportChecking>
     </Container>
   )
 }
+
+const ReportView = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  background-color: aliceblue;
+  position: absolute;
+  left: 0;
+  display: flex;
+  gap: 1em;
+  padding: 5em;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Info = styled.p`
   font-size: 1.3em;
