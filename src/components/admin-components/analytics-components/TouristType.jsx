@@ -202,7 +202,7 @@ export default class TouristType extends PureComponent {
       <div>
         <Title>Type of Tourists</Title>
         <Container>
-        <PieChart width={400} height={400}>
+        <PieChart width={400} height={350}>
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}

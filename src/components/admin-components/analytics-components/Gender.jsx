@@ -184,8 +184,8 @@ export default class Gender extends PureComponent {
     getDoc(doc(collection(firestore, 'admin'), 'analytics')).then((result) => {
       const analytics = result.data();
       this.setState({
-        localCount: analytics['male'] == null ? 1 : analytics['local'],
-        internationalCount: analytics['female'] == null ? 1 : analytics['international']
+        localCount: analytics['male'] == null ? 1 : analytics['male'],
+        internationalCount: analytics['female'] == null ? 1 : analytics['female']
       }, () => {
         this.setState({
           data: [
@@ -202,7 +202,7 @@ export default class Gender extends PureComponent {
       <div>
         <Title>Statistics By Gender</Title>
         <Container>
-        <PieChart width={400} height={400}>
+        <PieChart width={400} height={350}>
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}

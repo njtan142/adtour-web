@@ -34,9 +34,9 @@ export default function MonthlyAnalytics() {
 
 const Container = styled.div`
     display: flex;
-    padding: 3em;
     flex-wrap: wrap;
     row-gap: 5em;
+    
 `;
 
 
