@@ -11,6 +11,7 @@ import NegativeCount from './NegativeCount'
 import TouristType from './TouristType'
 import Gender from './Gender'
 import Performance from './Performance'
+import DestinationsAnalytics from './DestinationsAnalytics'
 
 export default function MonthlyAnalytics() {
     return (
@@ -28,6 +29,7 @@ export default function MonthlyAnalytics() {
                 <DailyAppVisits />
                 <TouristType />
             </Container>
+            <DestinationsAnalytics />
         </>
     )
 }
