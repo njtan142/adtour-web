@@ -2,12 +2,42 @@ import React from 'react'
 import { useState } from 'react';
 import styled from 'styled-components'
 import { firestore } from '../../../firebase';
-import { doc, collection, getDocs } from 'firebase/firestore';
+import { doc, collection, getDocs, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { async } from '@firebase/util';
 
 export default function DestinationsAnalytics() {
     const [destinations, setDestinations] = useState([]);
+    const [comments, setComments] = useState([]);
+    const [viewFeedbacks, setViewFeedbacks] = useState(false);
+
+    async function loadComments(path) {
+        console.log(path);
+        const commentsRef = collection(doc(firestore, path), 'comments');
+        const newComments = []
+        await getDocs(commentsRef).then(async (comments) => {
+            if (comments.empty) {
+                alert("There's no feedback to show")
+                return;
+            }
+            const commentDocs = comments.docs
+            for(const comment in commentDocs){
+                const data = commentDocs[comment].data();
+                if (data.sentiment != undefined) {
+                    const userRef = doc(collection(firestore, 'users'), data.user_id)
+                    await getDoc(userRef).then((user) => {
+                        data.name = user.data().first_name + " " + user.data().last_name
+                        console.log(data)
+                        newComments.push(data);
+                    })
+                }
+            }
+            console.log(newComments);
+            setComments(newComments);
+            setViewFeedbacks(true)
+        });
+
+    }
 
 
     async function loadDestinations(type) {
@@ -21,7 +51,7 @@ export default function DestinationsAnalytics() {
                     latestFeedback: data['latest_feedback'],
                     positive: data.positive,
                     negative: data.negative,
-                    path: destination.path,
+                    path: destination.ref.path,
                 }
                 additionalDestinations.push(newDestination)
             })
@@ -53,15 +83,103 @@ export default function DestinationsAnalytics() {
                         <LatestFeedback>{destination.latestFeedback}</LatestFeedback>
                         <Positive>{destination.positive == null ? 0 : destination.positive}</Positive>
                         <Negative>{destination.negative == null ? 0 : destination.negative}</Negative>
-                        <Feedbacks>View Feedbacks</Feedbacks>
+                        <Feedbacks onClick={() => { loadComments(destination.path) }}>View Feedbacks</Feedbacks>
                     </Destination>
                 )
                 )
             }
             {console.log(destinations.length)}
+
+            {
+                viewFeedbacks &&
+                <FeedbackViewContainer>
+                    <Close onClick={() => { setViewFeedbacks(false) }}>X</Close>
+                    {
+                        comments.map((comment, index) => {
+                            console.log(comment.uploaded.toDate())
+                            const str = comment.comment
+                            return (
+                                <CommentContainer key={index}>
+                                    <Top>
+                                        <Commenter>{comment.name}</Commenter>
+                                        <CommentTimeStamp>{comment.uploaded.toDate().toString().split("GMT")[0]}</CommentTimeStamp>
+                                    </Top>
+                                    <Bottom>
+                                        <Comment>{'"' + str.charAt(0).toUpperCase() + str.slice(1) + '"'}</Comment>
+                                        {
+                                            comment.sentiment == "positive" ?
+                                            <SentimentPositive>{comment.sentiment}</SentimentPositive> : <SentimentNegative>{comment.sentiment}</SentimentNegative>
+                                        }
+                                    </Bottom>
+                                </CommentContainer>
+                            )
+                        })
+                    }
+                </FeedbackViewContainer>
+            }
+
         </Container>
     )
 }
+const SentimentNegative = styled.p`
+    color: rgba(255, 0, 0, 0.63);
+`;
+
+const SentimentPositive = styled.p`
+    color: #4C9EEB;
+`;
+
+const Comment = styled.p``;
+
+const Bottom = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 0em 2em;
+`;
+
+const CommentTimeStamp = styled.p`
+    opacity: 0.34;
+`;
+
+const Commenter = styled.p`
+    color: #4C9EEB
+`;
+
+const Top = styled.div`
+    display: flex;
+    padding: 0em 2em;
+    gap: 1em;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #f3f3f3;
+    margin: 1em;
+    border-radius: 1em;
+    border: 2px solid #d1d1d1;
+`;
+
+const Close = styled.button`
+    float: right;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+`;
+
+const FeedbackViewContainer = styled.div`
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 70%;
+    height: 450px;
+    overflow-y: scroll;
+    background-color: #dcdcdc;
+    border-radius: 1em;
+    padding: 2em;
+`;
 
 const Feedbacks = styled.button`
     margin-right: 1em;
