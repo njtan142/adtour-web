@@ -75,6 +75,16 @@ export default function DestinationsAnalytics() {
 
     return (
         <Container>
+                    <Title>
+                        Tourist Attraction Responses
+                    </Title>
+                    <Destination>
+                        <Name></Name>
+                        <LatestFeedbackTop>Latest Feedback</LatestFeedbackTop>
+                        <PositiveTop>Positive</PositiveTop>
+                        <NegativeTop>Negative</NegativeTop>
+                        <FeedbackTop></FeedbackTop>
+                    </Destination>
             {
                 destinations.map((destination, index) =>
                 (
@@ -93,6 +103,7 @@ export default function DestinationsAnalytics() {
             {
                 viewFeedbacks &&
                 <FeedbackViewContainer>
+                   
                     <Close onClick={() => { setViewFeedbacks(false) }}>X</Close>
                     {
                         comments.map((comment, index) => {
@@ -121,6 +132,35 @@ export default function DestinationsAnalytics() {
         </Container>
     )
 }
+
+const NegativeTop = styled.p`
+    color: #CD0E0E;
+`;
+
+const PositiveTop = styled.p`
+    color: #12CD0E;
+`;
+
+const LatestFeedbackTop = styled.p`
+    width: 100px;
+    color: #1B71C1;
+`;
+
+const FeedbackTop = styled.button`
+    margin-right: 1em;
+    border: none;
+    border-radius: 10em;
+    padding: 1em 2em;
+    color: white;
+    height: fit-content;
+    background-color: white;
+`;
+
+
+const Title = styled.h3`
+    align-self: flex-start;
+`;
+
 const SentimentNegative = styled.p`
     color: rgba(255, 0, 0, 0.63);
 `;
