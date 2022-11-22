@@ -16,6 +16,8 @@ import Performance from './analytics-components/Performance';
 import Gender from './analytics-components/Gender';
 import DailyAppVisits from './analytics-components/DailyAppVisits';
 import TouristType from './analytics-components/TouristType';
+import DestinationsAnalytics from './analytics-components/DestinationsAnalytics';
+import Feedbacks from './analytics-components/Feedbacks';
 
 export default function Reports() {
   const monthsRef = useRef();
@@ -37,6 +39,8 @@ export default function Reports() {
     gender: false,
     visits: false,
     tourist: false,
+    destinations: false,
+    feedbacks: false,
   }
 
   const [toGenerate, setToGenerate] = useState(reports);
@@ -104,7 +108,8 @@ export default function Reports() {
           {toGenerate.gender && <Gender />}
           {toGenerate.visits && <DailyAppVisits />}
           {toGenerate.tourist && <TouristType />}
-
+          {toGenerate.destinations && <DestinationsAnalytics />}
+          {toGenerate.feedbacks && <Feedbacks />}
         </ReportView>
       }
       <Header>
@@ -165,6 +170,14 @@ export default function Reports() {
           <div>
             <CheckBox type="checkbox" onChange={(value) => { reports.tourist = value.target.checked; console.log(reports) }} />
             <Label>Type of Tourist</Label>
+          </div>
+          <div>
+            <CheckBox type="checkbox" onChange={(value) => { reports.destinations = value.target.checked; console.log(reports) }} />
+            <Label>Tourist Attraction Responses</Label>
+          </div>
+          <div>
+            <CheckBox type="checkbox" onChange={(value) => { reports.feedbacks = value.target.checked; console.log(reports) }} />
+            <Label>Feedbacks</Label>
           </div>
         </CheckBoxes>
         <GenerateReport>

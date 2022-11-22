@@ -208,6 +208,7 @@ export default function Destinations() {
         const profileRef = ref(storage, category.current.value + " - " + name.current.value)
         if (image.includes("https")) {
             updateDoc(destinationRef, { image_url: image })
+            window.location.reload();
         } else {
             uploadString(profileRef, image, 'data_url', { contentType: 'image/' }).then(() => {
                 getDownloadURL(profileRef).then((url) => {

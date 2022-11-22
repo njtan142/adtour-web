@@ -7,6 +7,7 @@ import Home from "./Home";
 import Destinations from "./Admin/Destinations";
 import Locations from "./Admin/Locations";
 import Login from "./Login";
+import Feedbacks from "./admin-components/analytics-components/Feedbacks";
 
 
 
@@ -22,6 +23,7 @@ const App = (props) => {
                         <Route exact path="/users" element={<Users />} />
                         <Route exact path="/destinations" element={<Destinations />} />
                         <Route exact path="/locations" element={<Locations />} />
+                        <Route exact path="/feedbacks" element={<Feedbacks />} />
                     </Routes>
                 </AuthProvider>
             </Router>
