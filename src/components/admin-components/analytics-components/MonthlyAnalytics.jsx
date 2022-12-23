@@ -12,6 +12,7 @@ import TouristType from './TouristType'
 import Gender from './Gender'
 import Performance from './Performance'
 import DestinationsAnalytics from './DestinationsAnalytics'
+import MapboxHeatmap from './app.tsx'
 
 export default function MonthlyAnalytics() {
     return (
@@ -28,11 +29,28 @@ export default function MonthlyAnalytics() {
                 <Gender />
                 <DailyAppVisits />
                 <TouristType />
+                <HeatmapContainer>
+                    <HMTitle>Feedback Heatmap</HMTitle>
+                    <MapboxHeatmap />
+                </HeatmapContainer>
             </Container>
             <DestinationsAnalytics />
         </>
     )
 }
+
+const HeatmapContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    canvas {
+        border-radius: 1em;
+    }
+`;
+const HMTitle = styled.h1``;
 
 const Container = styled.div`
     display: flex;

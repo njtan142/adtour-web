@@ -8,6 +8,9 @@ import Destinations from "./Admin/Destinations";
 import Locations from "./Admin/Locations";
 import Login from "./Login";
 import Feedbacks from "./admin-components/analytics-components/Feedbacks";
+import Mapbox from "./admin-components/analytics-components/mapbox";
+import MapboxHeatmap from "./admin-components/analytics-components/app.tsx";
+
 
 
 
@@ -24,6 +27,8 @@ const App = (props) => {
                         <Route exact path="/destinations" element={<Destinations />} />
                         <Route exact path="/locations" element={<Locations />} />
                         <Route exact path="/feedbacks" element={<Feedbacks />} />
+                        <Route exact path="/map" element={<Mapbox />} />
+                        <Route exact path="/heatmap" element={<MapboxHeatmap />} />
                     </Routes>
                 </AuthProvider>
             </Router>
